@@ -34,11 +34,13 @@ async def getUid():
                 RecvApduList, sw1, sw2 = conn.transmit(SendApduList)
                 uid = toHexString(RecvApduList) + \
                     hex(sw1)[2:] + hex(sw2)[2:]
+                uid = uid.replace(" ", "")
 
                 SendApduList = [0xFF, 0xCA, 0x01, 0x00, 0x00]
                 RecvApduList, sw1, sw2 = conn.transmit(SendApduList)
                 ats = toHexString(RecvApduList) + \
                     hex(sw1)[2:] + hex(sw2)[2:]
+                ats = ats.replace(" ", "")
 
                 if ats == "6a81":
                     break
