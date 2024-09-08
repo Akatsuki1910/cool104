@@ -1,0 +1,23 @@
+.card-list {
+  display: flex;
+  gap: 2px;
+
+  .icon {
+    width: 20px;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+  }
+
+  .num {
+    font-weight: bold;
+  }
+
+  .view {
+    color: yellow;
+  }
+
+  .disabled {
+    visibility: hidden;
+  }
+}

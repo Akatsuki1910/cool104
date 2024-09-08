@@ -1,0 +1,25 @@
+{
+  "name": "cool104",
+  "type": "module",
+  "module": "./src/index.ts",
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "vite",
+    "server": "tsx ./server/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "express": "^4.19.2",
+    "prisma": "^5.19.1",
+    "sass": "^1.78.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4",
+    "vanjs-core": "^1.5.2",
+    "vanjs-ext": "^0.6.1",
+    "vite": "^5.4.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.19.1",
+    "cors": "^2.8.5"
+  }
+}

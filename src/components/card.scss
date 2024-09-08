@@ -1,0 +1,29 @@
+.card {
+  background-color: white;
+  border-radius: 10px;
+  width: 200px;
+  height: calc(200px * 1.56);
+  box-sizing: border-box;
+  padding: 10px;
+  position: relative;
+
+  &[data-disabled="true"] {
+    background-color: transparent;
+  }
+
+  .num {
+    font-size: 80px;
+    line-height: 1;
+  }
+
+  .img {
+    width: 50px;
+  }
+
+  .l-img {
+    width: 120px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+}
