@@ -49,4 +49,4 @@ app.put(`${API_PREFIX}/update`, async (req, res) => {
   }
 });
 
-app.listen(port, () => console.log(`http://localhost:${port}`));
+app.listen(port, "0.0.0.0", () => console.log(`http://localhost:${port}`));
