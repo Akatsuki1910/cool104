@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 
 app.post(`${API_PREFIX}/create`, async (_, res) => {
   try {
-    const { uid } = await fetch("https://localhost:8080").then((res) =>
+    const { uid } = await fetch("http://localhost:8080").then((res) =>
       res.json()
     );
     // const uid = Math.random().toString(36).slice(-8);

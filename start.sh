@@ -1,4 +1,7 @@
 bun i
+cd server
+bun run init
+cd ..
 nohup bun run card &
 nohup bun run server &
 nohup bun run dev &
