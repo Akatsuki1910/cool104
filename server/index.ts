@@ -28,7 +28,7 @@ app.post(`${API_PREFIX}/create`, async (_, res) => {
     await prisma.user.create({ data: { uid } });
     res.send(uid);
   } catch (e) {
-    throw e;
+    res.send((e as Error).message);
   }
 });
 
