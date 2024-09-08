@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc && vite build",
     "dev": "vite",
-    "server": "tsx ./server/index.ts"
+    "server": "tsx ./server/index.ts",
+    "card": "uvicorn main:app --port 8080 --reload"
   },
   "devDependencies": {
     "@types/bun": "latest",

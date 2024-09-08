@@ -11,22 +11,20 @@ const API_PREFIX = "/api";
 
 const prisma = new PrismaClient();
 
-app.post(`${API_PREFIX}/create`, async (req, res) => {
-  const { uid } = req.body;
-
+app.post(`${API_PREFIX}/create`, async (_, res) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { uid },
-    });
+    const { uid } = await fetch("https://localhost:8080").then((res) =>
+      res.json()
+    );
+
+    const user = await prisma.user.findUnique({ where: { uid } });
 
     if (user) {
       res.send("Already exists");
       return;
     }
 
-    await prisma.user.create({
-      data: { uid },
-    });
+    await prisma.user.create({ data: { uid } });
     res.send("OK");
   } catch (e) {
     throw e;
@@ -37,19 +35,14 @@ app.put(`${API_PREFIX}/update`, async (req, res) => {
   const { uid, medals } = req.body;
 
   try {
-    const user = await prisma.user.findUnique({
-      where: { uid },
-    });
+    const user = await prisma.user.findUnique({ where: { uid } });
 
     if (!user) {
       res.send("Cannot find user");
       return;
     }
 
-    await prisma.user.update({
-      where: { uid },
-      data: { medals },
-    });
+    await prisma.user.update({ where: { uid }, data: { medals } });
     res.send("OK");
   } catch (e) {
     throw e;
