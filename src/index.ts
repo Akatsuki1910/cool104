@@ -15,6 +15,8 @@ interface CardState {
   suit: Parameters<typeof Card>[1];
 }
 
+const postState = vanX.reactive({ ok: 0, err: 0, text: "" });
+
 const fullCardListState = vanX.reactive(createCardList(CARD_VIEW_LIST));
 const gameState = van.state(true);
 const cardViewListState = vanX.reactive(CARD_VIEW_LIST);
@@ -23,6 +25,7 @@ const nowState = van.state<CardState>({ num: -1, suit: "spades" });
 const fieldState = vanX.reactive<LengthArray<CardState, 5>>(
   [] as unknown as LengthArray<CardState, 5>
 );
+
 const setCard = (i: number) => {
   if (!fullCardListState.length) {
     fieldState[i] = { num: -1, suit: "spades" };
@@ -42,9 +45,9 @@ const setCard = (i: number) => {
 [...Array(5)].forEach((_, i) => setCard(i));
 
 const finishSearch = () =>
-  !fieldState.some((state) => {
-    state.num === nowState.val.num || state.suit === nowState.val.suit;
-  }) ||
+  !fieldState.some(
+    ({ num, suit }) => num === nowState.val.num || suit === nowState.val.suit
+  ) ||
   (fullCardListState.length === 0 &&
     fieldState.every((state) => state.num === -1));
 
@@ -63,14 +66,18 @@ window.addEventListener("keydown", async (e) => {
   if (keyPress) return;
 
   if (pressKey(e.code, "Enter")) {
-    const res = await fetch("http://localhost:3000/api/create", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ uid }),
-    });
-    console.log(await res.text());
+    try {
+      const res = await fetch("http://localhost:3000/api/create", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+      postState.ok++;
+      postState.text = await res.text();
+    } catch (e) {
+      postState.err++;
+    }
   }
 
   if (!gameState.val) {
@@ -128,7 +135,9 @@ const Main = () =>
       { class: "top-wrapper" },
       div(
         p(() => `count: ${count.val}`),
-        p(() => `gameState: ${gameState.val}`)
+        p(() => `gameState: ${gameState.val}`),
+        p(() => `uid: ${uid}`),
+        p(() => `postState: ${JSON.stringify(postState)}`)
       ),
       div({ class: "main-card" }, () =>
         Card(nowState.val.num, nowState.val.suit)

@@ -16,6 +16,7 @@ app.post(`${API_PREFIX}/create`, async (_, res) => {
     const { uid } = await fetch("https://localhost:8080").then((res) =>
       res.json()
     );
+    // const uid = Math.random().toString(36).slice(-8);
 
     const user = await prisma.user.findUnique({ where: { uid } });
 
@@ -25,7 +26,7 @@ app.post(`${API_PREFIX}/create`, async (_, res) => {
     }
 
     await prisma.user.create({ data: { uid } });
-    res.send("OK");
+    res.send(uid);
   } catch (e) {
     throw e;
   }
