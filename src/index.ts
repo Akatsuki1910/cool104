@@ -131,18 +131,27 @@ window.addEventListener("keyup", (e) => {
 
 const wsState = van.state("");
 const wsMessageState = van.state("");
+let isSocketOpen = false;
 const socket = new WebSocket("ws://127.0.0.1:8081");
-socket.addEventListener("open", () => (wsState.val = "Hello Server!"));
+socket.addEventListener("open", () => {
+  isSocketOpen = true;
+  wsState.val = "Hello Server!";
+});
 socket.addEventListener(
   "error",
   (event) => (wsState.val = `WebSocket error ${event}`)
 );
-socket.addEventListener(
-  "close",
-  (event) => (wsState.val = `WebSocket close ${event}`)
-);
+socket.addEventListener("close", (event) => {
+  isSocketOpen = false;
+  wsState.val = `WebSocket close ${event}`;
+});
 socket.onopen = () => (wsState.val = "WebSocket onopen");
 socket.onmessage = (event) => (wsMessageState.val = event.data);
+setInterval(() => {
+  if (isSocketOpen) {
+    socket?.send(JSON.stringify({ message: "hello?" }));
+  }
+}, 100);
 
 const Main = () =>
   main(

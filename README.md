@@ -10,6 +10,7 @@ rm -rf cool104-main main.zip && wget https://github.com/Akatsuki1910/cool104/arc
 
 ```sh
 ps u | grep "bun run" | grep "S " | awk '{print $2}' | xargs kill
+ps u | grep " S " | awk '{print $2}' | xargs kill
 ```
 
 ```sh
