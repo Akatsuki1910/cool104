@@ -67,7 +67,7 @@ window.addEventListener("keydown", async (e) => {
 
   if (pressKey(e.code, "Enter")) {
     try {
-      const res = await fetch("http://localhost:3000/api/create", {
+      const res = await fetch("http://127.0.0.1:3000/api/create", {
         headers: {
           "Content-Type": "application/json",
         },
