@@ -129,6 +129,21 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
+const wsState = van.state("");
+const wsMessageState = van.state("");
+const socket = new WebSocket("ws://127.0.0.1:8081");
+socket.addEventListener("open", () => (wsState.val = "Hello Server!"));
+socket.addEventListener(
+  "error",
+  (event) => (wsState.val = `WebSocket error ${event}`)
+);
+socket.addEventListener(
+  "close",
+  (event) => (wsState.val = `WebSocket close ${event}`)
+);
+socket.onopen = () => (wsState.val = "WebSocket onopen");
+socket.onmessage = (event) => (wsMessageState.val = event.data);
+
 const Main = () =>
   main(
     div(
@@ -137,7 +152,9 @@ const Main = () =>
         p(() => `count: ${count.val}`),
         p(() => `gameState: ${gameState.val}`),
         p(() => `uid: ${uid}`),
-        p(() => `postState: ${JSON.stringify(postState)}`)
+        p(() => `postState: ${JSON.stringify(postState)}`),
+        p(() => `wsState: ${wsState.val}`),
+        p(() => `wsMessageState: ${wsMessageState.val}`)
       ),
       div({ class: "main-card" }, () =>
         Card(nowState.val.num, nowState.val.suit)
