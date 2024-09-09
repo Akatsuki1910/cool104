@@ -156,6 +156,7 @@ const Main = () => {
   socket.onopen = () => (wsState.val = "WebSocket onopen");
   socket.onmessage = (event) => {
     const d = event.data;
+    wsMessageState.val = d;
 
     if (d === "111111") {
       canWsPress = true;
