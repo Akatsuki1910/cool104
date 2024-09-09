@@ -5,15 +5,18 @@
 ## install
 
 ```sh
-rm -rf cool104-main main.zip && wget https://github.com/Akatsuki1910/cool104/archive/refs/heads/main.zip && unzip main.zip && cd cool104-main && bun i && cd server && bun run init && cd ..
-```
-
-```sh
-ps u | grep "bun run" | grep "S " | awk '{print $2}' | xargs kill
-ps u | grep " S " | awk '{print $2}' | xargs kill
+rm -rf cool104-main main.zip && wget https://github.com/Akatsuki1910/cool104/archive/refs/heads/main.zip && unzip main.zip && cd cool104-main
 ```
 
 ```sh
 nmap localhost
 ps u
+```
+
+```sh
+sudo systemctl start display-manager
+export DISPLAY=:0
+chromium-browser http://localhost:5173 --kiosk
+
+sudo systemctl stop display-manager
 ```

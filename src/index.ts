@@ -62,6 +62,25 @@ const pressKey = (code: KeyboardEvent["code"], key: KeyboardEvent["code"]) => {
   return false;
 };
 
+const onPressKey = (num: number) => {
+  if (num === -1) return;
+
+  if (
+    nowState.val.num === -1 ||
+    nowState.val.num === fieldState[num].num ||
+    nowState.val.suit === fieldState[num].suit
+  ) {
+    count.val++;
+    nowState.val = fieldState[num];
+    cardViewListState[nowState.val.suit][nowState.val.num] = 2;
+    setCard(num);
+
+    if (finishSearch()) {
+      gameState.val = false;
+    }
+  }
+};
+
 window.addEventListener("keydown", async (e) => {
   if (keyPress) return;
 
@@ -104,22 +123,7 @@ window.addEventListener("keydown", async (e) => {
     }
   }
 
-  if (num === -1) return;
-
-  if (
-    nowState.val.num === -1 ||
-    nowState.val.num === fieldState[num].num ||
-    nowState.val.suit === fieldState[num].suit
-  ) {
-    count.val++;
-    nowState.val = fieldState[num];
-    cardViewListState[nowState.val.suit][nowState.val.num] = 2;
-    setCard(num);
-
-    if (finishSearch()) {
-      gameState.val = false;
-    }
-  }
+  onPressKey(num);
 });
 
 window.addEventListener("keyup", (e) => {
@@ -132,6 +136,8 @@ window.addEventListener("keyup", (e) => {
 const wsState = van.state("");
 const wsMessageState = van.state("");
 let isSocketOpen = false;
+let wsPressed = -1;
+let canWsPress = true;
 
 const Main = () => {
   const socket = new WebSocket("ws://127.0.0.1:8081");
@@ -148,7 +154,31 @@ const Main = () => {
     wsState.val = `WebSocket close ${JSON.stringify(event)}`;
   });
   socket.onopen = () => (wsState.val = "WebSocket onopen");
-  socket.onmessage = (event) => (wsMessageState.val = event.data);
+  socket.onmessage = (event) => {
+    const d = event.data;
+
+    if (d === "111111") {
+      canWsPress = true;
+      return;
+    }
+
+    let pressFlg = false;
+    for (let i = 0; i < 5; i++) {
+      if (d[i] === "0") {
+        wsPressed = i;
+        pressFlg = true;
+      }
+    }
+
+    if (pressFlg) {
+      onPressKey(wsPressed);
+      canWsPress = false;
+    } else {
+      pressFlg = false;
+      wsPressed = -1;
+    }
+  };
+
   setInterval(() => {
     if (isSocketOpen) {
       socket?.send(JSON.stringify({ message: "hello?" }));
