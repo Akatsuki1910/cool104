@@ -6,7 +6,7 @@ import "./index.scss";
 import { CARD_VIEW_LIST, createCardList, type CardIcon } from "./ts/cardUtil";
 import type { LengthArray } from "./ts/libs";
 
-const { main, div, p } = van.tags;
+const { main, div, p, dialog } = van.tags;
 
 const uid = Math.random().toString(36).slice(-8);
 
@@ -77,6 +77,12 @@ const onPressKey = (num: number) => {
 
     if (finishSearch()) {
       gameState.val = false;
+      const dialog = document.getElementById(
+        "finish-dialog"
+      ) as HTMLDialogElement;
+      if (dialog) {
+        dialog.showModal();
+      }
     }
   }
 };
@@ -108,6 +114,13 @@ window.addEventListener("keydown", async (e) => {
         cardViewListState[key as CardIcon].fill(0);
       }
       fieldState.forEach((_, i) => setCard(i));
+
+      const dialog = document.getElementById(
+        "finish-dialog"
+      ) as HTMLDialogElement;
+      if (dialog) {
+        dialog.close();
+      }
 
       return;
     }
@@ -204,6 +217,17 @@ const Main = () => {
     ),
     vanX.list(div({ class: "card-wrapper" }), fieldState, (state) =>
       Card(state.val.num, state.val.suit)
+    ),
+    dialog(
+      {
+        id: "finish-dialog",
+        class: "finish-dialog",
+      },
+      div(
+        { class: "finish-dialog-inner" },
+        p("FINISH!"),
+        p(() => `PAY: ${count.val}`)
+      )
     )
   );
 };
