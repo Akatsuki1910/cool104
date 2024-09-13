@@ -5,6 +5,7 @@ import { CardList } from "./components/cardList";
 import "./index.scss";
 import { CARD_VIEW_LIST, createCardList, type CardIcon } from "./ts/cardUtil";
 import type { LengthArray } from "./ts/libs";
+import { Count } from "./components/count";
 
 const { main, div, p, dialog } = van.tags;
 
@@ -113,6 +114,8 @@ window.addEventListener("keydown", async (e) => {
       for (const key in cardViewListState) {
         cardViewListState[key as CardIcon].fill(0);
       }
+      fullCardListState.length = 0;
+      fullCardListState.push(...createCardList(CARD_VIEW_LIST));
       fieldState.forEach((_, i) => setCard(i));
 
       const dialog = document.getElementById(
@@ -213,7 +216,10 @@ const Main = () => {
       div({ class: "main-card" }, () =>
         Card(nowState.val.num, nowState.val.suit)
       ),
-      div(() => CardList(cardViewListState))
+      div(
+        () => CardList(cardViewListState),
+        () => Count(count.val)
+      )
     ),
     vanX.list(div({ class: "card-wrapper" }), fieldState, (state) =>
       Card(state.val.num, state.val.suit)
@@ -226,7 +232,8 @@ const Main = () => {
       div(
         { class: "finish-dialog-inner" },
         p("FINISH!"),
-        p(() => `PAY: ${count.val}`)
+        p(() => `PAY: ${count.val}`),
+        p({ class: "finish-dialog-press" }, "Press Space to restart")
       )
     )
   );
